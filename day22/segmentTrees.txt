@@ -1,0 +1,16 @@
+//for queries like findiing the sum from ind 1 to j or find the max element from i to j
+//data structure stores summation bw 0th index to nth index..
+
+//lets say we have 10 nums 
+i-0,n=9(last index)
+so root node stores sum of all numbers..
+9+0/2=4
+so the child nodes store from 0 to 4 and right one stores from 5 to 9
+0+4/2=2
+lc=(0 to 2) rightchild=(2,2)
+for node (5 to 9): lc=((9+5)/2)=7 lc:(5,7) rc:(8,9)
+and so on.. until u have one element each..
+
+//pseudocode... helllnaaaaa
+ghanaaa ghanaaa sundaraaaaa, karuna maniayipodaaaaa
+

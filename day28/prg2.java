@@ -1,0 +1,43 @@
+// You are working as a database administrator in a large multinational company that 
+// manages a massive inventory of products. Each product category is stored in an 
+// Excel sheet, where column headers are dynamically assigned based on an auto-
+// incrementing column index.
+
+// Your task is to develop a column labeling system that converts a given column index 
+// into its corresponding Excel-style column title. 
+
+// Input Format:
+// -------------
+// A single integer, representing the column index.
+
+// Output Format:
+// --------------
+// A string, the Excel-style column title.
+
+
+// Sample Input-1:
+// ---------------
+// 28
+
+// Sample Output-1:
+// ----------------
+// AB
+
+// Explanation:
+// ------------
+// Column 27 is "AA".
+// Column 28 is "AB".
+
+
+// Sample Input-2:
+// ---------------
+// 701 
+
+// Sample Output-2:
+// ----------------
+// ZY
+
+// Explanation:
+// ------------
+// Column 701 is equivalent to "ZY" in an Excel sheet.
+

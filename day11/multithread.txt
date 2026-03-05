@@ -1,0 +1,18 @@
+Runnable: pubblic void run, no return type, no exception handling.., no thread control
+callable:returns, control on the number of threads per executor, thread pool, ..
+Callable
+   ↓
+ExecutorService.submit()
+   ↓
+Future object
+   ↓
+future.get() → result
+
+synchronization:
+
+
+
+
+moderate pearson cc and high auc.. what does it mean.. 
+ans) as threshold keep decreasing.. fpr increases...
+mathew=>is good for unbalanced dataset
