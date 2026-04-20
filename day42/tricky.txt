@@ -1,0 +1,35 @@
+ String s1 = "ab" + "c";  // compile-time → pool
+String s2 = "abc";
+
+System.out.println(s1 == s2); // ✅ true
+
+String x = "ab";
+String s1 = x + "c";     // runtime
+String s2 = "abc";
+
+System.out.println(s1 == s2); // ❌ false
+
+Integer caches bw -128 to 127
+
+List<Integer> list = Arrays.asList(1,2,3);
+list.add(4); // ❌ UnsupportedOperationException
+
+List<Integer>list=new ArrayList<>(Arrays.asList(1,2,3));// works...
+ list.add(4);//works...
+      StringBuilder sb=new StringBuilder("abc");//16+3.
+      System.out.println(sb.capacity());//16 by default capacity of sb=16
+      System.out.println(sb.length());//19
+
+
+ 
+       List<Integer>l=new ArrayList<>(Arrays.asList(1,2));
+       List<Integer>l2=new ArrayList<>(Arrays.asList(1,2));
+       System.out.println(l.equals(l2));//true
+       l.add(5);
+       System.out.println(l); //remove the value at index
+       l.remove(Integer.valueOf(2));//removes actual value
+       System.out.println(l);
+       Integer a[]=l2.toArray(new Integer[0]);
+       System.out.println(Arrays.toString(a));
+       System.out.println("abc".equals(null));//false
+       //System.out.println(null.equals("abc"));//nullptr ex

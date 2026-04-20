@@ -1,0 +1,60 @@
+/*
+Motu and Patlu are playing a game, Samosa eating challenge.
+Given N Samosas. Motu will start the game always. 
+
+Game Rules are as follows,
+Each time, the player eats K samosas.
+where K is, 0 < K < N.
+and N should be perfectly divisible by K.
+
+The player who cannot eat any more samosas, lose the game.
+Print 'true' if Motu wins the game, otherwise 'false'.
+
+Input Format:
+-------------
+An integer N, number of Samosas.
+
+Output Format:
+--------------
+Print a boolean value.
+
+
+Sample Input-1:
+---------------
+3
+
+Sample Output-1:
+----------------
+false
+
+Explanation: Motu eats 1 samosa, Patlu eats 1 samosa, and Motu cannot eat any samosa.
+
+Sample Input-2:
+---------------
+2
+
+Sample Output-2:
+----------------
+true
+
+Explanation: Motu eats 1 samosa, and Patlu cannot eat any samosa.
+motu aur patlu ki jodiiiiiiiiiiii..........
+arey motu aur patlu ki jodiiee
+na kodiiii
+*/
+
+import java.util.*;
+class Solution{
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        if(n%2==0){
+            System.out.println(true);
+        }
+        else{
+            System.out.println(false);
+        }
+    }
+}
+
+//na dhela na dhamadi na kodiiii

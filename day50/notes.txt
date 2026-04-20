@@ -1,0 +1,338 @@
+1.1 What is Machine Learning?
+Machine Learning is a subset of AI where systems learn from data to make predictions or decisions without being explicitly programmed for each task.
+Three core types:
+
+Supervised Learning — learns from labeled data (input → output pairs). Examples: spam detection, image classification.
+Unsupervised Learning — finds hidden patterns in unlabeled data. Examples: clustering, dimensionality reduction.
+Reinforcement Learning — an agent learns by taking actions and receiving rewards/penalties. Examples: game playing (AlphaGo), robotics.
+
+1.2 The ML Pipeline
+
+ Key ML Concepts You Must Know
+Bias-Variance Tradeoff:
+
+High bias = model is too simple → underfits (misses patterns)
+High variance = model is too complex → overfits (memorizes noise)
+Goal: find the sweet spot. Regularization (L1/L2) helps reduce variance.
+
+Train / Validation / Test Split:
+
+Training set (~70%) → model learns
+Validation set (~15%) → hyperparameter tuning
+Test set (~15%) → final unbiased evaluation
+
+Loss Functions:
+
+MSE (Mean Squared Error) — regression tasks
+Cross-Entropy Loss — classification tasks
+Hinge Loss — SVMs
+
+Evaluation Metrics:
+
+Classification: Accuracy, Precision, Recall, F1-Score, AUC-ROC
+Regression: MSE, RMSE, MAE, R²
+
+
+Part 2: Neural Networks & Deep Learning
+2.1 Neurons and Layers
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widgetInside a single neuron:
+output = activation( Σ(weight_i × input_i) + bias )
+Activation Functions:
+FunctionFormulaUse CaseReLUmax(0, x)Hidden layers (most common)Sigmoid1/(1+e⁻ˣ)Binary output (0 to 1)Tanh(eˣ - e⁻ˣ)/(eˣ + e⁻ˣ)Hidden layers (−1 to 1)Softmaxeˣᵢ / ΣeˣⱼMulti-class outputGELUx × Φ(x)Transformers (BERT, GPT)
+2.2 Backpropagation & Gradient Descent
+Training loop (simplified):
+pythonfor epoch in range(num_epochs):
+    # Forward pass
+    predictions = model(inputs)
+    loss = loss_fn(predictions, targets)
+    
+    # Backward pass (compute gradients)
+    loss.backward()
+    
+    # Update weights
+    optimizer.step()
+    optimizer.zero_grad()
+Optimizers:
+
+SGD — basic, noisy but sometimes generalizes well
+Adam — adaptive learning rates, most popular default
+AdaGrad — good for sparse data
+RMSProp — addresses AdaGrad's shrinking learning rate
+
+
+Part 3: Large Language Models (LLMs) — Architecture Deep Dive
+3.1 The Transformer Architecture
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widget3.2 Attention Mechanism — The Core Innovation
+Self-Attention formula:
+Attention(Q, K, V) = softmax(QKᵀ / √d_k) × V
+
+Q (Query) — "what am I looking for?"
+K (Key) — "what do I contain?"
+V (Value) — "what do I actually give?"
+√d_k — scaling factor to prevent vanishing gradients
+
+Multi-head attention runs several attention operations in parallel, each learning different relationships (e.g., one head learns syntax, another learns coreference).
+python# Simplified attention in PyTorch
+import torch
+import torch.nn.functional as F
+
+def attention(Q, K, V):
+    d_k = Q.size(-1)
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / (d_k ** 0.5)
+    weights = F.softmax(scores, dim=-1)
+    return torch.matmul(weights, V), weights
+3.3 Positional Encoding
+Transformers have no recurrence (unlike RNNs), so they can't naturally understand word order. Positional encoding adds position information to embeddings:
+PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+Modern LLMs often use RoPE (Rotary Position Embedding) instead, which handles longer sequences better.
+
+Part 4: LLM Training, Fine-Tuning & Alignment
+4.1 Pre-training
+LLMs are trained on massive text corpora with next-token prediction (causal LM):
+Loss = -Σ log P(token_t | token_1, ..., token_{t-1})
+This is called autoregressive language modeling. The model learns by trying to predict what comes next.
+4.2 Fine-Tuning Strategies
+MethodDescriptionCostWhen to useFull fine-tuningUpdate all weightsVery highMax performance neededLoRAAdd low-rank adapter matricesLowMost practical choiceQLoRALoRA + quantized base modelVery lowConsumer GPUPrompt tuningLearn soft prompt tokensVery lowMinimal dataRLHFRL from human feedbackHighAlignment/chat models
+LoRA (Low-Rank Adaptation) — the most popular:
+python# LoRA adds two small matrices A and B
+# Original: W (d × d), e.g. 4096 × 4096 = 16M params
+# LoRA: A (d × r) + B (r × d), e.g. r=8: 4096×8 + 8×4096 = 65K params
+# Forward: output = W₀x + BAx   (only A and B are trained)
+4.3 RLHF (Reinforcement Learning from Human Feedback)
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widget
+Part 5: LLM Frameworks — LangChain & Beyond
+5.1 What is LangChain?
+LangChain is a framework for building applications powered by LLMs. It provides abstractions for:
+
+Connecting to LLMs (OpenAI, Anthropic, HuggingFace, local models)
+Managing prompts and conversation history
+Chaining multiple LLM calls together
+Integrating external tools and data sources (RAG)
+Building agents that can reason and act
+
+Core components:
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widget5.2 LangChain Code — Basics to Advanced
+Basic LLM call:
+pythonfrom langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, SystemMessage
+
+llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
+
+messages = [
+    SystemMessage(content="You are a helpful assistant."),
+    HumanMessage(content="What is backpropagation?")
+]
+
+response = llm.invoke(messages)
+print(response.content)
+PromptTemplate:
+pythonfrom langchain_core.prompts import ChatPromptTemplate
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are an expert in {domain}."),
+    ("human", "Explain {concept} in simple terms.")
+])
+
+chain = prompt | llm   # LCEL (LangChain Expression Language)
+
+result = chain.invoke({"domain": "machine learning", "concept": "transformers"})
+Conversation with Memory:
+pythonfrom langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationChain
+
+memory = ConversationBufferMemory()
+conversation = ConversationChain(llm=llm, memory=memory)
+
+conversation.predict(input="Hi! My name is Rahul.")
+conversation.predict(input="What's my name?")  # LLM remembers "Rahul"
+5.3 RAG (Retrieval Augmented Generation)
+RAG allows LLMs to answer questions using your own documents. This is the most important real-world LLM pattern.
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widgetRAG in code:
+pythonfrom langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+from langchain_openai import ChatOpenAI
+
+# 1. Load documents
+loader = PyPDFLoader("mybook.pdf")
+docs = loader.load()
+
+# 2. Chunk the text
+splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+chunks = splitter.split_documents(docs)
+
+# 3. Embed and store
+embeddings = OpenAIEmbeddings()
+vectorstore = FAISS.from_documents(chunks, embeddings)
+
+# 4. Create retriever + QA chain
+retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+qa_chain = RetrievalQA.from_chain_type(
+    llm=ChatOpenAI(model="gpt-4o"),
+    retriever=retriever
+)
+
+# 5. Query
+answer = qa_chain.invoke({"query": "What are the main topics covered?"})
+print(answer["result"])
+5.4 Agents & Tools
+An agent uses an LLM as a reasoning engine to decide which tools to call, observe the results, and continue reasoning until it reaches an answer.
+The ReAct pattern (Reason + Act):
+Thought: I need to find the current weather in Mumbai
+Action: search_tool("weather Mumbai today")
+Observation: Temperature is 34°C, humid
+Thought: I have the answer now
+Final Answer: It's 34°C and humid in Mumbai today.
+pythonfrom langchain.agents import AgentExecutor, create_react_agent
+from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_core.prompts import PromptTemplate
+
+# Define tools
+search = DuckDuckGoSearchRun()
+tools = [search]
+
+# Create agent
+agent = create_react_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+# Run
+result = agent_executor.invoke({"input": "What's the latest news about GPT-5?"})
+5.5 LCEL — LangChain Expression Language
+LCEL is LangChain's modern way to compose chains using the | (pipe) operator:
+pythonfrom langchain_core.output_parsers import StrOutputParser
+
+# Build a chain: prompt → llm → parse output
+chain = prompt | llm | StrOutputParser()
+
+# Chains are composable
+classifier_chain = classify_prompt | llm | StrOutputParser()
+summarizer_chain = summarize_prompt | llm | StrOutputParser()
+
+# Parallel execution
+from langchain_core.runnables import RunnableParallel
+parallel = RunnableParallel(
+    classification=classifier_chain,
+    summary=summarizer_chain
+)
+result = parallel.invoke({"text": "Some article content..."})
+
+Part 6: Other Important LLM Frameworks
+6.1 LlamaIndex (formerly GPT Index)
+Specialized for data ingestion and querying — think of it as LangChain but optimized for document Q&A.
+pythonfrom llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+
+# Load all documents from a folder
+documents = SimpleDirectoryReader("./docs").load_data()
+
+# Build index (embed + store)
+index = VectorStoreIndex.from_documents(documents)
+
+# Query
+query_engine = index.as_query_engine()
+response = query_engine.query("What is the refund policy?")
+print(response)
+LangChain vs LlamaIndex:
+FeatureLangChainLlamaIndexFocusGeneral-purpose chains & agentsDocument indexing & retrievalStrengthsAgents, tools, complex pipelinesData connectors, query enginesLearning curveSteeperSimpler for RAGUse caseFull app logicDocument Q&A systems
+6.2 HuggingFace Transformers
+The go-to library for working with open-source models:
+pythonfrom transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+
+# Easy pipeline API
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+result = summarizer("Long article text here...", max_length=100)
+
+# Or load model directly
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b")
+model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3-8b")
+
+inputs = tokenizer("Once upon a time", return_tensors="pt")
+outputs = model.generate(**inputs, max_new_tokens=50)
+print(tokenizer.decode(outputs[0]))
+6.3 Semantic Kernel (Microsoft)
+Microsoft's framework for integrating LLMs into applications, especially for C# / .NET environments but also supports Python:
+pythonimport semantic_kernel as sk
+from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
+
+kernel = sk.Kernel()
+kernel.add_chat_service("gpt4", OpenAIChatCompletion("gpt-4o", api_key))
+
+# Define a semantic function (prompt-based)
+summarize = kernel.create_semantic_function(
+    "Summarize the following in one paragraph: {{$input}}"
+)
+result = await summarize("Long document text...")
+6.4 DSPy
+A newer framework that compiles prompts programmatically instead of writing them by hand:
+pythonimport dspy
+
+class RAGPipeline(dspy.Module):
+    def __init__(self):
+        self.retrieve = dspy.Retrieve(k=3)
+        self.generate = dspy.ChainOfThought("context, question -> answer")
+    
+    def forward(self, question):
+        context = self.retrieve(question).passages
+        return self.generate(context=context, question=question)
+
+Part 7: Advanced Concepts for Your Exam
+7.1 Prompt Engineering Techniques
+TechniqueDescriptionExampleZero-shotNo examples, just instruction"Classify this as positive/negative:"Few-shotProvide examples in promptShow 3 labeled examples before queryChain-of-ThoughtAsk for step-by-step reasoning"Think step by step..."Tree-of-ThoughtExplore multiple reasoning pathsBranching problem decompositionReActInterleave reasoning and actingUsed in agentsSelf-consistencySample multiple answers, majority voteFor complex reasoning tasks
+7.2 Vector Databases — How They Work
+Embeddings convert text into high-dimensional vectors (e.g., 1536 dimensions for OpenAI's text-embedding-3-small). Similar meanings → similar vectors → close in vector space.
+Similarity search algorithms:
+
+Cosine similarity — angle between vectors (most common)
+Euclidean distance — absolute distance
+Dot product — fast, used with normalized vectors
+
+HNSW (Hierarchical Navigable Small World) — the algorithm used by FAISS, Chroma, and Pinecone for approximate nearest-neighbor search at scale.
+7.3 Quantization
+Reduces model size/memory by using lower-precision numbers:
+PrecisionBitsMemory (7B model)FP3232~28 GBFP16/BF1616~14 GBINT88~7 GBINT4 (QLoRA)4~3.5 GB
+7.4 Context Window & Token Limits
+
+A token ≈ 0.75 words. "ChatGPT is great" ≈ 4 tokens.
+Context window = max tokens the model can process at once
+GPT-4o: 128K tokens, Claude: 200K tokens, Gemini 1.5: 1M tokens
+Exceeding context = information is truncated → use RAG or summarization chains
+
+7.5 Hallucinations & Mitigation
+LLMs can hallucinate — generate confident but wrong information. Mitigations:
+
+RAG (ground answers in retrieved docs)
+Lower temperature (more deterministic)
+Self-consistency prompting
+Output parsing + validation (Pydantic + LangChain)

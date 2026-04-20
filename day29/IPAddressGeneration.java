@@ -73,7 +73,7 @@ class IPAddressGeneration{
             ans.add(sb.toString());
             return;
         }
-
+        // every segments size is from 1 to 3] 
         for(int i=1;i<=3;i++){
             if(i+ind>s.length())break;
             String sub=s.substring(ind,ind+i);

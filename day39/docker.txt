@@ -1,0 +1,3 @@
+container is a linux process.
+with namespace(isolation), cgroups(resource control), root filesystem, security constraints
+
