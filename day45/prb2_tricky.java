@@ -55,4 +55,36 @@ Sample Output-2:
 
 */
 
+import java.util.*;
 
+class Solution {
+    static int[] days = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+    static int getDay(String s) {
+        int m = Integer.parseInt(s.substring(0, 2));
+        int d = Integer.parseInt(s.substring(3));
+        int total = 0;
+        for (int i = 0; i < m - 1; i++) total += days[i];
+        return total + d;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        String rStart = sc.next();
+        String rEnd = sc.next();
+        String sStart = sc.next();
+        String sEnd = sc.next();
+
+        int a = getDay(rStart);
+        int b = getDay(rEnd);
+        int c = getDay(sStart);
+        int d = getDay(sEnd);
+
+        int start = Math.max(a, c);
+        int end = Math.min(b, d);
+
+        int res = Math.max(0, end - start + 1);
+        System.out.println(res);
+    }
+}

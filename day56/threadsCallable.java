@@ -32,41 +32,55 @@ Sample Output:
 */
 
 //incomplete!!!!
-
 import java.util.*;
 import java.util.concurrent.*;
-class Solution{
-    static class Read implements Callable<Integer>{
-        
-    }
-    static class orderTask implements Callable<Integer>{
+
+class Solution {
+    static class ReadTask implements Callable<Integer> {
         int price;
-        public orderTask(int price){
-            this.price=price;
-        }
-        public Integer call(){
-            int finalPrice=0;
-            if(price>=1000){
-                finalPrice=(int)(price*0.90);
-            }
-            else{
-                finalPrice=(int)(price*0.95);
-            }
-            return finalPric;
+        ReadTask(int price) { this.price = price; }
+        public Integer call() { return price; }
+    }
+    static class DiscountTask implements Callable<Integer> {
+        Future<Integer> prev;
+        DiscountTask(Future<Integer> prev) { this.prev = prev; }
+
+        public Integer call() throws Exception {
+            int price = prev.get();
+            if (price >= 1000) return (int)(price * 0.9);
+            else return (int)(price * 0.95);
         }
     }
-    public static void main(String [] args){
-        Scanner sc=new Scanner(System.in);
-        int n=sc.nextInt();
-        ExecutorService executor=Executors.newFixedThreadPool(n);
-        List<Future<Integer>>res=new ArrayList<>();
-        for(int i=0;i<n;i++){
-            int k=sc.nextInt();
-            res.add(executor.submit(new orderTask(k)));
+    static class FinalTask implements Callable<Integer> {
+        Future<Integer> prev;
+        FinalTask(Future<Integer> prev) { this.prev = prev; }
+
+        public Integer call() throws Exception {
+            return prev.get();
         }
-        for(Future<Integer>f:res){
-            System.out.println(f.get());
+    }
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        ExecutorService executor = Executors.newFixedThreadPool(n);
+
+        List<Future<Integer>> results = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int price = sc.nextInt();
+
+            Future<Integer> f1 = executor.submit(new ReadTask(price));
+            Future<Integer> f2 = executor.submit(new DiscountTask(f1));
+            Future<Integer> f3 = executor.submit(new FinalTask(f2));
+
+            results.add(f3);
         }
-        
+
+        for (Future<Integer> f : results) {
+            System.out.print(f.get() + " ");
+        }
+
+        executor.shutdown();
     }
 }

@@ -60,4 +60,93 @@ There is no path as they both live in the same house 4.
 So answer = -1.
 
 */
+import java.util.*;
 
+class Solution {
+    static List<List<Integer>> adj;
+    static int[] disc, low;
+    static boolean[] vis;
+    static int time = 0;
+    static Set<String> bridges = new HashSet<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        adj = new ArrayList<>();
+        for (int i = 0; i <= n; i++) adj.add(new ArrayList<>());
+
+        for (int i = 0; i < m; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        int p = sc.nextInt();
+        int target = n;
+
+        if (p == target) {
+            System.out.println(-1);
+            return;
+        }
+
+        disc = new int[n + 1];
+        low = new int[n + 1];
+        vis = new boolean[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            if (!vis[i]) dfs(i, -1);
+        }
+
+        int ans = bfs(p, target);
+        System.out.println(ans == 0 ? -1 : ans);
+    }
+
+    static void dfs(int u, int parent) {
+        vis[u] = true;
+        disc[u] = low[u] = ++time;
+
+        for (int v : adj.get(u)) {
+            if (v == parent) continue;
+
+            if (!vis[v]) {
+                dfs(v, u);
+                low[u] = Math.min(low[u], low[v]);
+
+                if (low[v] > disc[u]) {
+                    bridges.add(u + "#" + v);
+                    bridges.add(v + "#" + u);
+                }
+            } else {
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+    }
+
+    static int bfs(int start, int end) {
+        Queue<int[]> q = new LinkedList<>();
+        boolean[] seen = new boolean[adj.size()];
+
+        q.offer(new int[]{start, 0});
+        seen[start] = true;
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int node = cur[0], cnt = cur[1];
+
+            if (node == end) return cnt;
+
+            for (int nei : adj.get(node)) {
+                if (!seen[nei]) {
+                    seen[nei] = true;
+                    int nc = cnt;
+                    if (bridges.contains(node + "#" + nei)) nc++;
+                    q.offer(new int[]{nei, nc});
+                }
+            }
+        }
+        return -1;
+    }
+}

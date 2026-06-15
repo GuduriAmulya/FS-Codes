@@ -1,0 +1,85 @@
+/*
+Write a function solution(N) that, given an integer N, returns the maximum 
+possible value obtained by removing exactly one digit '5' from the decimal 
+representation of N.
+
+⚙️ Constraints
+N is an integer in the range: −999995 ≤ N ≤ 999,995
+
+The number always contains at least one digit '5'. The number has at least two digits
+
+Input Format:
+-------------
+A single integer N
+
+Output Format:
+--------------
+Return the maximum possible integer after removing exactly one occurrence of digit '5'
+
+🧠 Key Observations
+-------------------
+Case 1: Positive Number
+Removing different '5' digits gives different results
+Choose the removal that gives the largest number
+
+Case 2: Negative Number
+We want the result to be closest to zero
+That means removing a '5' that minimizes the negative magnitude
+
+
+Sample Input-1: 
+15958
+
+Sample Output-1:
+1958
+
+Explanation:
+------------
+Possible removals:
+5958, 1958, 1598 → Maximum = 1958
+
+
+
+Sample Input-2: 
+-5859
+
+Sample Output-2: 
+-589
+
+Explanation:
+------------
+Possible removals:
+-859, -589 → Maximum = -589 (closer to zero)
+*/
+
+import java.util.*;
+class Solution{
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        boolean neg=false;
+        int n=sc.nextInt();
+        if(n<0){
+            neg=true;
+        }
+        String val=String.valueOf(n);
+        //System.out.println(val);
+        int max=Integer.MIN_VALUE;
+        for(int i=0;i<val.length();i++){
+            if(val.charAt(i)=='5'){
+                String k=getNewS(val,i);
+                int v=Integer.parseInt(k);
+                max=Math.max(max,v);
+            }
+        }
+        System.out.println(max);  
+    }
+    public static String getNewS(String s, int ind){
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            if(i!=ind){
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,5 @@
+/*
+From Leetcode..
+provided n number of invitation links only instead of infinite..
+
+*/
